@@ -7,7 +7,7 @@ categoryRoutes.get("/", getAllCategories);
 categoryRoutes.get("/:id", getCategoryById);
 
 categoryRoutes.post("/", createCategory);
-categoryRoutes.put("/:id", updateCategoryById);
+categoryRoutes.patch("/:id", updateCategoryById);
 categoryRoutes.delete("/:id", removeCategoryById);
 
 export default categoryRoutes;
