@@ -38,3 +38,52 @@ export const createCategory = async (req, res, next) => {
         next(error);
     }
 }
+
+export const getCategoryById = async (req, res, next) =>{
+    try{
+        const data = await Category.findById(req.params.id).populate("products");
+        if(data){
+            return res.status(200).json({
+                success: true,
+                data,
+                message: "search category id successfully!",
+            });
+        }
+    }catch(error){
+        next(error);
+    }
+}
+
+export const updateCategoryById = async (req, res, next) => {
+    try{
+        const data = await Category.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        if(data){
+            return res.status(200).json({
+                success: true,
+                data,
+                message: "Update category successfully!",
+            })
+        }
+    }catch(error){
+        next(error);
+    }
+}
+
+export const removeCategoryById = async (req, res, next) => {
+    try{
+        const data = await Category.findByIdAndDelete(req.params.id);
+        if(data){
+            return res.status(200).json({
+                success: true,
+                message: "Delete category successfully!",
+            });
+        }else{
+            return res.status(404).json({
+                success: false,
+                message: "Not found category!",
+            });
+        }
+    }catch(error){
+        next(error);
+    }
+}
