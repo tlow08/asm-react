@@ -8,7 +8,7 @@ export const categorySchema = Joi.object({
         "string.max": "Title must have at most 255 characters",
     }),
 
-    description: Joi.string().message({
+    description: Joi.string().messages({
         "string.base": "Description must be a string",
     })
 })

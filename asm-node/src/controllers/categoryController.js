@@ -1,5 +1,6 @@
 import slugify from "slugify";
 import Category from "../models/CategoryModel.js";
+import { categorySchema } from './../validSchema/categorySchema.js';
 
 export const getAllCategories = async (req, res, next) =>{
     try{
@@ -18,6 +19,15 @@ export const getAllCategories = async (req, res, next) =>{
 
 export const createCategory = async (req, res, next) => {
     try{
+        const {error} = categorySchema.validate(req.body, {
+            abortEarly: false,
+        });
+        if(error){
+            const errors = error.details.map((err)=> err.message);
+            return res.status(400).json({
+                message: errors,
+            })
+        }
         const slug = slugify(req.body.title, {
             replacement: "-",
             lower: true,
@@ -25,7 +35,8 @@ export const createCategory = async (req, res, next) => {
             locale: "vi",
             trim: true,
         });
-        console.log(slug);
+        // console.log(slug);
+       
         const data = await Category.create({...req.body, slug});
         if(data){
             return res.status(201).json({
@@ -56,6 +67,15 @@ export const getCategoryById = async (req, res, next) =>{
 
 export const updateCategoryById = async (req, res, next) => {
     try{
+        const {error} = categorySchema.validate(req.body, {
+            abortEarly: false,
+        });
+        if(error){
+            const errors = error.details.map((err)=> err.message);
+            return res.status(400).json({
+                message: errors,
+            })
+        }
         const data = await Category.findByIdAndUpdate(req.params.id, req.body, {new: true});
         if(data){
             return res.status(200).json({

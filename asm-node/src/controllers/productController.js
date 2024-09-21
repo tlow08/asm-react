@@ -1,5 +1,6 @@
 import Product from "../models/ProductModel.js";
 import Category from "../models/CategoryModel.js";
+import { productSchema } from "../validSchema/productSchema.js";
 export const getAllProducts = async (req, res, next)=>{
     try{
         const data = await Product.find().populate("category");
@@ -32,6 +33,15 @@ export const getProductById = async (req, res, next)=>{
 
 export const createProduct = async (req, res, next)=>{
     try{
+        const {error} = productSchema.validate(req.body,{
+            abortEarly: false,
+        });
+        if(error){
+            const errors = error.details.map((err)=> err.message);
+            return res.status(400).json({
+                message: errors,
+            })
+        }
         const data = await Product.create(req.body);
         const updateCategory = await Category.findByIdAndUpdate(
             req.body.category,
@@ -54,6 +64,16 @@ export const createProduct = async (req, res, next)=>{
 
 export const updateProductById = async (req, res, next)=>{
     try{
+
+        const {error} = productSchema.validate(req.body, {
+            abortEarly: false,
+        })
+        if(error){
+            const errors = error.details.map((err)=> err.message);
+            return res.status(400).json({
+                message: errors,
+            })
+        }
         const data = await Product.findByIdAndUpdate(req.params.id, {new: true});
         const updateCategory = await Category.findByIdAndUpdate(
             req.body.category,
