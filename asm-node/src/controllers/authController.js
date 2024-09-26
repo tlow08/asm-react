@@ -5,7 +5,6 @@ import { authSchema } from "../validSchema/authSchema.js";
 
 export const register = async (req, res, next)=>{
     try{
-
         const {error} = authSchema.validate(req.body,{
             abortEarly: false,
         });
@@ -58,6 +57,7 @@ export const login = async (req, res, next)=>{
                 message: errors,
             })
         }
+        
         const {email, password} = req.body;
         const useExists =  await User.findOne({email});
         if(!useExists){

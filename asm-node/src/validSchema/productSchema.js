@@ -19,6 +19,9 @@ export const productSchema = Joi.object({
     category: Joi.string().messages({
         "string.base": "Category must be a string",
     }),
+    image: Joi.string().messages({
+        "string.base": "Category must be a string",
+    }),
     linkImage: Joi.string().messages({
         "string.base": "Category must be a string",
     })
