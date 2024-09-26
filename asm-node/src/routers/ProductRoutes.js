@@ -1,12 +1,20 @@
-import {Router} from "express";
-import { createProduct, getAllProducts, getProductById, removeProductById, updateProductById } from './../controllers/productController.js';
+import { Router } from "express";
+import {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  removeProductById,
+  updateProductById,
+} from "./../controllers/productController.js";
+import { checkAuth } from "../middlewares/checkAuth.js";
+import { checkAdmin } from "../middlewares/checkAdmin.js";
 
 const productRouter = Router();
 
 productRouter.get("/", getAllProducts);
 productRouter.get("/:id", getProductById);
 
-productRouter.post("/", createProduct);
-productRouter.patch("/:id", updateProductById);
-productRouter.delete("/:id", removeProductById);
+productRouter.post("/", checkAuth, checkAdmin, createProduct);
+productRouter.patch("/:id", checkAuth, checkAdmin, updateProductById);
+productRouter.delete("/:id", checkAuth, removeProductById);
 export default productRouter;

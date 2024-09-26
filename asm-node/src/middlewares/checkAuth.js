@@ -17,7 +17,12 @@ export const checkAuth = async (req, res, next) =>{
         }
 
         const user = await User.findById(decode._id);
-        req.user = user;
+        // req.user = user;
+        if(user.role !== "admin"){
+            return res.status(401).json({
+                message: "Unauthorized",
+            })
+        }
         next();
     }catch(error){
         return res.status(401).json({

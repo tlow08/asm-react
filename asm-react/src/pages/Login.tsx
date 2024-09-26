@@ -12,6 +12,7 @@ const Login = () => {
     .then((data)=>{
       toast.success("Login successfully!");
       localStorage.setItem("token", data.data.accessToken);
+      localStorage.setItem("role", data.data.user.role); 
       nav("/admin");
     })
     .catch((error)=>{
