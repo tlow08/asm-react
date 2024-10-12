@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { Product } from "../interface/ProductIn";
 import { getAllProduct } from "../services/product";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { InProduct } from "../interface/Product";
 
 const Shop = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<InProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -13,7 +13,7 @@ const Shop = () => {
       .then(({ data }) => {
         // console.log("API response:", data);
         if (Array.isArray(data.data)) {
-          setProducts(data.data); 
+          setProducts(data.data);
           toast.success("Successfully!");
         } else {
           toast.error("Data is not an array");

@@ -5,7 +5,7 @@ import AuthFrom from "../components/AuthFrom";
 import { InUser } from "../interface/User";
 import { registerUser } from "../services/user";
 
-const Register: SubmitHandler<InUser> = () => {
+const Register: React.FC = () => {
   const nav = useNavigate();
   const handleRegister: SubmitHandler<InUser> = (values :InUser)=>{
     registerUser(values)
@@ -19,8 +19,8 @@ const Register: SubmitHandler<InUser> = () => {
     })
   }
   return (
-    <div className="max-w-screen-2xl m-auto">
-      <h1 className="text-center text-2xl font-semibold">Register</h1>
+    <div className="max-w-screen-2xl m-auto  pt-16">
+      <h1 className="text-center text-2xl font-semibold ">Register</h1>
       <AuthFrom onSubmit={handleRegister}/>
     </div>
   )

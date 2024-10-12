@@ -17,8 +17,13 @@ export const checkAuth = async (req, res, next) =>{
         }
 
         const user = await User.findById(decode._id);
-        // req.user = user;
-        if(user.role !== "admin"){
+        if (!user) {
+            return res.status(401).json({
+                message: "User not found",
+            });
+        }
+        req.user = user;
+        if(user.role !== "admin" && user.role !== "member"){
             return res.status(401).json({
                 message: "Unauthorized",
             })

@@ -11,6 +11,9 @@ import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import ListProduct from "./pages/admin/ListProduct";
 import PrivateRouter from "./components/PrivateRouter";
+import AddProduct from "./pages/admin/AddProduct";
+import EditProduct from "./pages/admin/EditProduct";
+import ShoppingCart from "./pages/ShoppingCart";
 
 function App() {
   const routerConfig = [
@@ -23,6 +26,7 @@ function App() {
         { path: "/product/:id", element: <ProductDetail /> },
         { path: "/login", element: <Login /> },
         { path: "/register", element: <Register /> },
+        { path: "/cart", element: <ShoppingCart />},
       ],
     },
     {
@@ -35,6 +39,8 @@ function App() {
           children: [
             { path: "dashboard", element: <Dashboard /> },
             { path: "products", element: <ListProduct /> },
+            { path: "products/add", element: <AddProduct/>},
+            { path: "products/edit/:id", element: <EditProduct/>}
           ],
         },
       ],

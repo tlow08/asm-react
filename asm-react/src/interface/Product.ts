@@ -1,4 +1,4 @@
-export type Product = {
+export type InProduct = {
     _id: string| number;
     title: string;
     description: string;

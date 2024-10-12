@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Product } from "../../interface/ProductIn";
+import { InProduct } from "../../interface/Product";
 import { deleteProduct, getAllProduct } from "../../services/product";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const ListProduct = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<InProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     getAllProduct()
@@ -22,21 +23,24 @@ const ListProduct = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleDelete = (id: string|number )=>{
-    if(confirm("delete product?")){
-        deleteProduct(id)
-        .then(()=>{
-            setProducts(products.filter((product)=> product._id !== id));
-            toast.success("Product delete successfully!");
+  const handleDelete = (id: string | number) => {
+    if (confirm("delete product?")) {
+      deleteProduct(id)
+        .then(() => {
+          setProducts(products.filter((product) => product._id !== id));
+          toast.success("Product delete successfully!");
         })
-        .catch((error)=>{
-            toast.error("Error: " + error.message);
-        })
+        .catch((error) => {
+          toast.error("Error: " + error.message);
+        });
     }
-  }
+  };
   return (
     <>
       {loading && <p>Loading</p>}
+      <Link to={"/admin/products/add"} className="btn btn-info">
+        Add product
+      </Link>
       <table className="table">
         <thead>
           <tr>
@@ -54,10 +58,24 @@ const ListProduct = () => {
               <td>{index}</td>
               <td>{item.title}</td>
               <td>{item.description}</td>
-              <td><img src={item.image} alt="" className="w-[50px]" /></td>
+              <td>
+                <img src={item.image} alt="" className="w-[50px]" />
+              </td>
               <td>{item.price}</td>
               <td>
-                <button onClick={()=> handleDelete(item._id)} className="btn btn-danger">Delete</button>
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="btn btn-danger"
+                >
+                  Delete
+                </button>
+                <Link
+                  to={`/admin/products/edit/${item._id}`}
+                  className="btn btn-warning"
+                >
+                  {" "}
+                  Edit
+                </Link>
               </td>
             </tr>
           ))}
