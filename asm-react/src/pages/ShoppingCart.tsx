@@ -1,79 +1,13 @@
-import { useEffect, useState } from "react";
-import { getCart, updateCartProduct, removeFromCart } from "../services/cart";
-import toast from "react-hot-toast";
-
-// Define the Product and CartItem interfaces
-interface Product {
-  _id: string;
-  title: string;
-  image: string;
-  price: number;
-}
-
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
+import { useShopCart } from "../hooks/useShoppCart";
 
 const ShoppingCart: React.FC = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchCart = () => {
-      getCart()
-        .then((response) => {
-          setCartItems(response.data.data.products);
-        })
-        .catch((error) => {
-          toast.error("Failed to fetch cart items: " + error.message);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    };
-
-    fetchCart();
-  }, []);
-
-  const handleQuantityChange = (productId: string, quantity: number) => {
-    if (quantity < 1) return; // Prevent setting quantity below 1
-    updateCartProduct(productId, quantity)
-      .then(() => {
-        setCartItems((prevItems) =>
-          prevItems.map((item) =>
-            item.product._id === productId ? { ...item, quantity } : item
-          )
-        );
-        toast.success("Sản phẩm đã bị xóa khỏi giỏ hàng!");
-        location.reload();
-      })
-      .catch((error) => {
-        toast.error("Error" + error.message);
-      });
-  };
-
-  const handleDelete = (productId: string) => {
-    if (window.confirm("Bạn muốn xóa?")) {
-      removeFromCart(productId)
-        .then(() => {
-          setCartItems((prevItems) =>
-            prevItems.filter((item) => item.product._id !== productId)
-          );
-          toast.success("Sản phẩm đã bị xóa khỏi giỏ hàng!");
-          location.reload();
-        })
-        .catch((error) => {
-          toast.error("Failed to remove product: " + error.message);
-        });
-    }
-  };
-
+  const { loading, cartItems, totalPrice, handleQuantityChange, handleDelete } =
+    useShopCart();
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="max-w-screen-2xl m-auto h-lvh">
-      <table className="table mt-16">
+    <div className="max-w-screen-2xl m-auto h-lvh  gap-8 p-6  ">
+      <table className=" table mt-8">
         <thead>
           <tr>
             <th>STT</th>
@@ -81,7 +15,8 @@ const ShoppingCart: React.FC = () => {
             <th>Ảnh</th>
             <th>Giá</th>
             <th>Số lượng</th>
-            <th>Thao tác</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -101,7 +36,10 @@ const ShoppingCart: React.FC = () => {
                 <div className="flex gap-2 items-center">
                   <button
                     onClick={() =>
-                      handleQuantityChange(item.product._id, item.quantity + 1)
+                      handleQuantityChange(
+                        item.product._id as string,
+                        item.quantity + 1
+                      )
                     }
                     className="btn btn-info"
                   >
@@ -113,7 +51,7 @@ const ShoppingCart: React.FC = () => {
                     min="1"
                     onChange={(e) =>
                       handleQuantityChange(
-                        item.product._id,
+                        item.product._id as string,
                         Number(e.target.value)
                       )
                     }
@@ -122,7 +60,10 @@ const ShoppingCart: React.FC = () => {
                   <button
                     className="btn btn-info"
                     onClick={() =>
-                      handleQuantityChange(item.product._id, item.quantity - 1)
+                      handleQuantityChange(
+                        item.product._id as string,
+                        item.quantity - 1
+                      )
                     }
                   >
                     -
@@ -131,16 +72,29 @@ const ShoppingCart: React.FC = () => {
               </td>
               <td>
                 <button
-                  onClick={() => handleDelete(item.product._id)}
+                  onClick={() => handleDelete(item.product._id as string)}
                   className="btn btn-danger"
                 >
                   Xóa
                 </button>
               </td>
+              <td>
+                <div className="flex items-center justify-between gap-2 text-base font-semibold">
+                  <p>{item.product.price}$</p>
+                  <p>X</p>
+                  <p>{item.quantity}</p>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div className=" w-full flex justify-end items-center gap-2 mt-4">
+        <p className="text-[19px] font-semibold">
+          Tổng tiền: <span className="text-danger">{totalPrice} $</span>
+        </p>{" "}
+        <button className="btn btn-warning">Thanh toán</button>
+      </div>
     </div>
   );
 };

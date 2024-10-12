@@ -1,27 +1,13 @@
-import { z } from "zod";
+import { useAuth } from "../hooks/useAuth";
 import { InUser } from "../interface/User";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 
-const userSchema = z.object({
-  email: z.string().email({ message: "Invalid email format" }), 
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters long" }), 
-});
 
 type Props = {
   onSubmit: (values: InUser) => void;
 };
 
 const AuthFrom = ({ onSubmit }: Props) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InUser>({
-    resolver: zodResolver(userSchema),
-  });
+  const {handleSubmit, register, errors } = useAuth();
   return (
     <>
       <form

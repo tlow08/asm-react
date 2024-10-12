@@ -1,28 +1,8 @@
-import { useEffect, useState } from "react";
-import { getAllProduct } from "../services/product";
-import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import { InProduct } from "../interface/Product";
+import { useProduct } from "../hooks/useProduct";
 
 const Shop = () => {
-  const [products, setProducts] = useState<InProduct[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    getAllProduct()
-      .then(({ data }) => {
-        // console.log("API response:", data);
-        if (Array.isArray(data.data)) {
-          setProducts(data.data);
-          toast.success("Successfully!");
-        } else {
-          toast.error("Data is not an array");
-          setProducts([]);
-        }
-      })
-      .catch((error) => toast.error("Error: " + error.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const {loading, products} = useProduct();
 
   return (
     <>

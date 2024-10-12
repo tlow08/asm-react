@@ -1,11 +1,19 @@
-import  { createContext, useContext, useState, useEffect } from 'react';
+import  { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { getCart } from '../services/cart'; // Adjust the import based on your file structure
+import { CartItem } from '../interface/Product';
 
-const CartContext = createContext();
 
-export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+interface CartContextType {
+  cartItems: CartItem[];
+  setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  totalQuantity: number;
+}
 
+const CartContext = createContext<CartContextType | undefined>(undefined);
+
+export const CartProvider = ({ children } :{children : ReactNode}) => {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [totalQuantity, setTotalQuantity] = useState<number>(0);
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -19,8 +27,11 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, []);
 
-  const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-
+  useEffect(()=>{
+  const quantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    setTotalQuantity(quantity);
+  },[cartItems]);
+  
   return (
     <CartContext.Provider value={{ cartItems, setCartItems, totalQuantity }}>
       {children}
@@ -30,5 +41,9 @@ export const CartProvider = ({ children }) => {
 
 // Custom hook to use the cart context
 export const useCart = () => {
-  return useContext(CartContext);
+  const context = useContext(CartContext);
+  if(!context){
+    throw new Error("error");
+  }
+  return context;
 };

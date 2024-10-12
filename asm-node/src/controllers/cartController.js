@@ -54,9 +54,8 @@ export const getCart = async (req, res) => {
     }
 };
 
-// Update Product Quantity in Cart
 export const updateCartProduct = async (req, res) => {
-    const { productId, quantity } = req.body; // Get product ID and quantity from the request body
+    const { productId, quantity } = req.body;
     if (!productId || !quantity) {
         return res.status(400).json({ message: "Product ID and quantity are required" });
     }
@@ -67,13 +66,11 @@ export const updateCartProduct = async (req, res) => {
             return res.status(404).json({ message: "Cart not found" });
         }
         
-        // Check if the product exists in the cart
         const productIndex = cart.products.findIndex((item) => item.product.toString() === productId);
         if (productIndex === -1) {
             return res.status(404).json({ message: "Product not found in cart" });
         }
         
-        // Update quantity
         cart.products[productIndex].quantity = quantity;
         await cart.save();
         
@@ -84,9 +81,8 @@ export const updateCartProduct = async (req, res) => {
     }
 };
 
-// Remove Product from Cart
 export const removeFromCart = async (req, res) => {
-    const { productId } = req.body; // Get product ID from request body
+    const { productId } = req.body; 
     if (!productId) {
         return res.status(400).json({ message: "Product ID is required" });
     }
@@ -97,7 +93,6 @@ export const removeFromCart = async (req, res) => {
             return res.status(404).json({ message: "Cart not found" });
         }
         
-        // Filter out the product to remove
         cart.products = cart.products.filter((item) => item.product.toString() !== productId);
         await cart.save();
         
