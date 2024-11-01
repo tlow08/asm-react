@@ -1,12 +1,22 @@
+import toast from "react-hot-toast";
 import { useShopCart } from "../hooks/useShoppCart";
 
 const ShoppingCart: React.FC = () => {
-  const { loading, cartItems, totalPrice, handleQuantityChange, handleDelete } =
+  const { loading, nav, cartItems, totalPrice, handleQuantityChange, handleDelete } =
     useShopCart();
+
+  const handleCheckout = ()=>{
+    if (cartItems.length === 0) {
+      toast.error("Giỏ hàng của bạn đang trống.");
+      return;
+    }
+    nav("/checkout", { state: { totalPrice, cartItems } });
+  }
+
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="max-w-screen-2xl m-auto h-lvh  gap-8 p-6  ">
+    <div className="max-w-screen-xl m-auto h-lvh  gap-8 p-6  ">
       <table className=" table mt-8">
         <thead>
           <tr>
@@ -93,7 +103,7 @@ const ShoppingCart: React.FC = () => {
         <p className="text-[19px] font-semibold">
           Tổng tiền: <span className="text-danger">{totalPrice} $</span>
         </p>{" "}
-        <button className="btn btn-warning">Thanh toán</button>
+        <button onClick={handleCheckout} className="btn btn-warning">Thanh toán</button>
       </div>
     </div>
   );

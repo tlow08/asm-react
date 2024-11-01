@@ -14,6 +14,10 @@ import PrivateRouter from "./components/PrivateRouter";
 import AddProduct from "./pages/admin/AddProduct";
 import EditProduct from "./pages/admin/EditProduct";
 import ShoppingCart from "./pages/ShoppingCart";
+import CheckOut from "./pages/CheckOut";
+import ListOrder from "./pages/admin/ListOrder";
+import BankTransfer from "./pages/BankTransfer";
+import PaymentOld from "./pages/PaymentOld";
 
 function App() {
   const routerConfig = [
@@ -27,6 +31,9 @@ function App() {
         { path: "/login", element: <Login /> },
         { path: "/register", element: <Register /> },
         { path: "/cart", element: <ShoppingCart />},
+        { path: "/checkout", element: <CheckOut />},
+        { path: "/bank-transfer", element: <BankTransfer />},
+        { path: "/payment-old", element: <PaymentOld />},
       ],
     },
     {
@@ -39,6 +46,7 @@ function App() {
           children: [
             { path: "dashboard", element: <Dashboard /> },
             { path: "products", element: <ListProduct /> },
+            { path: "orders", element: <ListOrder /> },
             { path: "products/add", element: <AddProduct/>},
             { path: "products/edit/:id", element: <EditProduct/>}
           ],

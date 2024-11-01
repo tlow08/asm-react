@@ -25,6 +25,7 @@ export const useAuth = () => {
   const handleLogin: SubmitHandler<InUser> = (values: InUser) => {
     loginUser(values)
       .then((data) => {
+        
         toast.success("Login successfully!");
         localStorage.setItem("token", data.data.accessToken);
         localStorage.setItem("role", data.data.user.role);
@@ -52,6 +53,7 @@ export const useAuth = () => {
     handleRegister,
     register,
     handleSubmit,
-    errors
+    errors,
+  
   };
 };

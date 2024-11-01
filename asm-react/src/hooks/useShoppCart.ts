@@ -3,11 +3,13 @@ import { getCart, removeFromCart, updateCartProduct } from "../services/cart";
 // import { CartItem } from "../interface/Product";
 import toast from "react-hot-toast";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
-export const useShopCart = () =>{
-    // const [cartItems, setCartItems] = useState<CartItem[]>([]);
+export const useShopCart = () => {
+  // const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const nav = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
-  const { setCartItems, cartItems } = useCart(); 
+  const { setCartItems, cartItems } = useCart();
   useEffect(() => {
     const fetchCart = () => {
       getCart()
@@ -63,11 +65,17 @@ export const useShopCart = () =>{
     0
   );
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
   return {
     handleDelete,
     handleQuantityChange,
     cartItems,
     loading,
-    totalPrice
-  }
-}
+    totalPrice,
+    nav,
+    clearCart,
+  };
+};

@@ -16,7 +16,7 @@ const AdminLayout = () => {
           <ul className="list-group list-group-flush">
             <li className="list-group-item"><Link to="/admin/dashboard">Dashboard</Link></li>
             <li className="list-group-item"><Link to="/admin/products">Products</Link></li>
-            <li className="list-group-item"><Link to="/admin">Orders</Link></li>
+            <li className="list-group-item"><Link to="/admin/orders">Orders</Link></li>
             <li className="list-group-item"><Link to="/admin">Users</Link></li>
           </ul>
         </nav>

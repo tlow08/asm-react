@@ -4,7 +4,7 @@ const ProductDetail = () => {
   const {loading, product, quantity, setQuantity, handleAddCart} = useDetail();
   return (
     <>
-      <section className="max-w-screen-2xl m-auto pt-8 ">
+      <section className="max-w-screen-xl m-auto pt-8 ">
         {loading && <p>loading</p>}
         {product && (
           <div className="grid grid-cols-2 gap-8">
